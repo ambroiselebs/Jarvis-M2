@@ -21,7 +21,7 @@ def gpt3(query: str) -> str:
         print(debug.DEBUG_FORMAT + "DALL-E's gonna answer for this one")
 
         api_key = os.getenv("OPENAI_KEY")
-        api_base = "https://api.shuttle.rip/v1/images/generations"
+        api_base = "https://api.shuttleai.app/v1/images/generations"
 
         headers = {
                 "Authorization": f"Bearer {api_key}",
@@ -59,6 +59,19 @@ def gpt3(query: str) -> str:
 
     # GPT-3.5-TURBO
     else:
+
+        # Clearing chat
+        if query == "changeons de conversation" or "change de conversation":
+            chat.clear()
+            chat.append({
+                'role': 'system',
+                'content': 'you are a voice assistant named Jarvisse. Don t present yourself at each message, just one time it s enough.'
+            })
+            engine.say("Ok, changeons de conversation")
+            engine.runAndWait()
+            return "cleared"
+
+        # Sending message to GPT-3.5-TURBO
         print(debug.DEBUG_FORMAT + "GPT3's gonna answer for this one")
         chat.append({'role': 'user', 'content': query})
 
