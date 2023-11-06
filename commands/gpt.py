@@ -61,7 +61,7 @@ def gpt3(query: str) -> str:
     else:
 
         # Clearing chat
-        if query == "changeons de conversation" or "change de conversation":
+        if query == "changeons de conversation" or "change de conversation" or "efface les autres messages":
             chat.clear()
             chat.append({
                 'role': 'system',
