@@ -17,6 +17,7 @@ Run the projet by executing : `python ./main.py`
 - python-dotenv
 - pronotepy
 - shuttleai
+- plyer
 ```
 
 # Structure : 

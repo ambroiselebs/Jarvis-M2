@@ -4,10 +4,16 @@ import commands.debug as debug
 import requests
 import json
 import os
+from plyer import notification
 
 # Initializing GPT-3 + DALL-E + pyttsx3
 shuttle = ShuttleClient(api_key=os.getenv("OPENAI_KEY"))
 engine = pyttsx3.init()
+
+chat = [{
+    'role': 'system',
+    'content': 'you are a voice assistant named Jarvisse. Don t present yourself at each message, just one time it s enough.'
+}]
 
 def gpt3(query: str) -> str:  
     # DALLE-E
@@ -33,7 +39,17 @@ def gpt3(query: str) -> str:
             res = json.loads(res.text)
             engine.say("L'image a bien été générée")
             engine.runAndWait()
+
+            # Printing image link
             print(res)
+            # Send a notification to the user with the image link
+            notification.notify(
+                title="Jarvis",
+                message=f"Voici le lien de l'image générée : {res}",
+                app_icon="jarvis.ico",
+                timeout=10
+            )
+
             return "ok"
         else: 
             print(f"{debug.DEBUG_FORMAT}Error: {res}")
@@ -44,12 +60,13 @@ def gpt3(query: str) -> str:
     # GPT-3.5-TURBO
     else:
         print(debug.DEBUG_FORMAT + "GPT3's gonna answer for this one")
+        chat.append({'role': 'user', 'content': query})
 
         res = shuttle.chat_completion(
             model="gpt-3.5-turbo",
-            messages=query,
+            messages=chat,
             stream=False,
-            plain=True,
+            plain=False,
             image=None,
             citations=False
         )
