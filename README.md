@@ -25,7 +25,8 @@ Run the projet by executing : `python ./main.py`
 commands
   |-all.py -> function commands
   |-debug.py -> entering or not debug mode
-  |-gpt.py -> manage GPT api
+  |-gpt.py -> manage AI part of the app
+  |-withopenai.py -> Using openai lib and not shuttleai
 
 sounds
   |-closing.mp3 -> closing sound
