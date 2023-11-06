@@ -15,7 +15,7 @@ chat = [{
     'content': 'you are a voice assistant named Jarvisse. Don t present yourself at each message, just one time it s enough.'
 }]
 
-def gpt3(query: str) -> str:  
+def ai(query: str) -> str:  
     # DALLE-E
     if "image" in query or "images" in query and "créer" in query or "générer" in query or "crée-moi" in query or "génère-moi" in query or "génère" in query or "crée" in query or "génère-moi" in query:
         print(debug.DEBUG_FORMAT + "DALL-E's gonna answer for this one")
@@ -45,7 +45,7 @@ def gpt3(query: str) -> str:
             # Send a notification to the user with the image link
             notification.notify(
                 title="Jarvis",
-                message=f"Voici le lien de l'image générée : {res}",
+                message=f"Voici le lien de l'image générée : {res['data'][0]['url']}",
                 app_icon="jarvis.ico",
                 timeout=10
             )
@@ -70,6 +70,7 @@ def gpt3(query: str) -> str:
             engine.say("Ok, changeons de conversation")
             engine.runAndWait()
             return "cleared"
+        
 
         # Sending message to GPT-3.5-TURBO
         print(debug.DEBUG_FORMAT + "GPT3's gonna answer for this one")

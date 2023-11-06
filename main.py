@@ -103,7 +103,7 @@ while True:
                 engine.say("Un instant je vous prie")
                 engine.runAndWait()
 
-                response = gpt.gpt3(audio)
+                response = gpt.ai(audio)
                 break
 
             # Don't do anything if the user didn't say anything
