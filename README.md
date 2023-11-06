@@ -14,11 +14,9 @@ Run the projet by executing : `python ./main.py`
 - openai
 - os
 - datetime
-- dotenv
+- python-dotenv
 - pronotepy
-- webbrowser
-- pytube
-- python-vlc
+- shuttleai
 ```
 
 # Structure : 
