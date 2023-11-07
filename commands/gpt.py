@@ -9,7 +9,6 @@ from plyer import notification
 # Initializing GPT-3 + DALL-E + pyttsx3
 shuttle = ShuttleClient(api_key=os.getenv("OPENAI_KEY"))
 engine = pyttsx3.init()
-
 chat = [{
     'role': 'system',
     'content': 'you are a voice assistant named Jarvisse. Don t present yourself at each message, just one time it s enough.'
@@ -61,7 +60,7 @@ def ai(query: str) -> str:
     else:
 
         # Clearing chat
-        if query == "changeons de conversation" or query == "change de conversation" or query == "efface les autres messages":
+        if "changeons de conversation" in query or "change de conversation" in query or "efface les autres messages" in query:
             chat.clear()
             chat.append({
                 'role': 'system',
@@ -71,23 +70,25 @@ def ai(query: str) -> str:
             engine.runAndWait()
             return "cleared"
         
-
         # Sending message to GPT-3.5-TURBO
-        print(debug.DEBUG_FORMAT + "GPT3's gonna answer for this one")
-        chat.append({'role': 'user', 'content': query})
+        else:
+            print(debug.DEBUG_FORMAT + "GPT3's gonna answer for this one")
+            chat.append({'role': 'user', 'content': query})
 
-        res = shuttle.chat_completion(
-            model="gpt-3.5-turbo",
-            messages=chat,
-            stream=False,
-            plain=False,
-            image=None,
-            citations=False
-        )
-        msg = res['choices'][0]['message']['content']
-        print(msg)
+            res = shuttle.chat_completion(
+                model="gpt-3.5-turbo",
+                messages=chat,
+                stream=False,
+                plain=False,
+                image=None,
+                citations=False
+            )
+            msg = res['choices'][0]['message']['content']
+            print(msg)
 
-        engine.say(msg)
-        engine.runAndWait()
+            engine.say(msg)
+            engine.runAndWait()
 
-        return msg
+            return msg
+
+       
