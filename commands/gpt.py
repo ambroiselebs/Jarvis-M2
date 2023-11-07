@@ -5,6 +5,8 @@ import requests
 import json
 import os
 from plyer import notification
+import requests
+import random
 
 # Initializing GPT-3 + DALL-E + pyttsx3
 shuttle = ShuttleClient(api_key=os.getenv("OPENAI_KEY"))
@@ -36,18 +38,30 @@ def ai(query: str) -> str:
         res = requests.post(api_base, headers=headers, json=data)
         if res.status_code == 200:
             res = json.loads(res.text)
-            engine.say("L'image a bien été générée")
-            engine.runAndWait()
-
             # Printing image link
             print(res)
+
+            # create folder images/ if it doesn't exist
+            if not os.path.exists("images/"):
+                os.mkdir("images/")
+            # Saving image to images/file_name
+            random_number = random.randint(0, 100000)
+            image_url = res['data'][0]['url']
+            image_name = "images/"+image_url.split("/")[-1]+"-"+str(random_number)+".png"
+            image = requests.get(image_url)
+            with open(image_name, "wb") as f:
+                f.write(image.content)
+
             # Send a notification to the user with the image link
             notification.notify(
                 title="Jarvis",
-                message=f"Voici le lien de l'image générée : {res['data'][0]['url']}",
+                message=f"L'image a bien été générée. Elle est disponible dans le dossier images sous le nom {image_name}",
                 app_icon="jarvis.ico",
                 timeout=10
             )
+            # saying the image has been generated
+            engine.say("L'image a bien été générée")
+            engine.runAndWait()
 
             return "ok"
         else: 
