@@ -17,7 +17,7 @@ chat = [{
 
 def ai(query: str) -> str:  
     # DALLE-E
-    if "image" in query or "images" in query and "créer" in query or "générer" in query or "crée-moi" in query or "génère-moi" in query or "génère" in query or "crée" in query or "génère-moi" in query:
+    """ if "crée-moi" in query or "génère-moi" in query or "génère" in query or "génère-moi" in query and ("image" in query or "images" in query):
         print(debug.DEBUG_FORMAT + "DALL-E's gonna answer for this one")
 
         api_key = os.getenv("OPENAI_KEY")
@@ -55,39 +55,39 @@ def ai(query: str) -> str:
             print(f"{debug.DEBUG_FORMAT}Error: {res}")
             engine.say("Une erreur est survenue")
             engine.runAndWait()
-            return f"{debug.DEBUG_FORMAT}Error: {res.status_code}"
+            return f"{debug.DEBUG_FORMAT}Error: {res.status_code}" """
 
     # GPT-3.5-TURBO
-    else:
+    # else:
 
-        # Clearing chat
-        if query == "changeons de conversation" or "change de conversation" or "efface les autres messages":
-            chat.clear()
-            chat.append({
-                'role': 'system',
-                'content': 'you are a voice assistant named Jarvisse. Don t present yourself at each message, just one time it s enough.'
-            })
-            engine.say("Ok, changeons de conversation")
-            engine.runAndWait()
-            return "cleared"
-        
-
-        # Sending message to GPT-3.5-TURBO
-        print(debug.DEBUG_FORMAT + "GPT3's gonna answer for this one")
-        chat.append({'role': 'user', 'content': query})
-
-        res = shuttle.chat_completion(
-            model="gpt-3.5-turbo",
-            messages=chat,
-            stream=False,
-            plain=False,
-            image=None,
-            citations=False
-        )
-        msg = res['choices'][0]['message']['content']
-        print(msg)
-
-        engine.say(msg)
+    # Clearing chat
+    if query == "changeons de conversation" or query == "change de conversation" or query == "efface les autres messages":
+        chat.clear()
+        chat.append({
+            'role': 'system',
+            'content': 'you are a voice assistant named Jarvisse. Don t present yourself at each message, just one time it s enough.'
+        })
+        engine.say("Ok, changeons de conversation")
         engine.runAndWait()
+        return "cleared"
+    
 
-        return msg
+    # Sending message to GPT-3.5-TURBO
+    print(debug.DEBUG_FORMAT + "GPT3's gonna answer for this one")
+    chat.append({'role': 'user', 'content': query})
+
+    res = shuttle.chat_completion(
+        model="gpt-3.5-turbo",
+        messages=chat,
+        stream=False,
+        plain=False,
+        image=None,
+        citations=False
+    )
+    msg = res['choices'][0]['message']['content']
+    print(msg)
+
+    engine.say(msg)
+    engine.runAndWait()
+
+    return msg
