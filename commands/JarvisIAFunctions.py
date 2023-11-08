@@ -1,6 +1,6 @@
 from shuttleai import *
 import pyttsx3
-import commands.debug as debug
+import commands.JarvisSettings as JarvisSettings
 import requests
 import json
 import os
@@ -19,7 +19,7 @@ chat = [{
 def ai(query: str) -> str:  
     # DALLE-E
     if "crée-moi" in query or "génère-moi" in query or "génère" in query or "génère-moi" in query and ("image" in query or "images" in query):
-        print(debug.DEBUG_FORMAT + "DALL-E's gonna answer for this one")
+        print(JarvisSettings.DEBUG_FORMAT + "DALL-E's gonna answer for this one")
 
         api_key = os.getenv("OPENAI_KEY")
         api_base = "https://api.shuttleai.app/v1/images/generations"
@@ -55,7 +55,7 @@ def ai(query: str) -> str:
             # Send a notification to the user with the image link
             notification.notify(
                 title="Jarvis",
-                message=f"L'image a bien été générée. Elle est disponible dans le dossier images sous le nom {image_name}",
+                message=f"L'image a bien été générée. Elle est disponible dans le dossier images sous le nom {image_name.split('/')[-1]}",
                 app_icon="jarvis.ico",
                 timeout=10
             )
@@ -65,10 +65,10 @@ def ai(query: str) -> str:
 
             return "ok"
         else: 
-            print(f"{debug.DEBUG_FORMAT}Error: {res}")
+            print(f"{JarvisSettings.DEBUG_FORMAT}Error: {res}")
             engine.say("Une erreur est survenue")
             engine.runAndWait()
-            return f"{debug.DEBUG_FORMAT}Error: {res.status_code}" """ """
+            return f"{JarvisSettings.DEBUG_FORMAT}Error: {res.status_code}" """ """
 
     # GPT-3.5-TURBO
     else:
@@ -86,7 +86,7 @@ def ai(query: str) -> str:
         
         # Sending message to GPT-3.5-TURBO
         else:
-            print(debug.DEBUG_FORMAT + "GPT3's gonna answer for this one")
+            print(JarvisSettings.DEBUG_FORMAT + "GPT3's gonna answer for this one")
             chat.append({'role': 'user', 'content': query})
 
             res = shuttle.chat_completion(

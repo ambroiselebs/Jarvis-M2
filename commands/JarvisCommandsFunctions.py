@@ -6,7 +6,7 @@ import pronotepy
 from pronotepy.ent import l_normandie
 import pygame
 import pyttsx3
-import commands.debug as debug
+import commands.JarvisSettings as JarvisSettings
 from plyer import notification
 
 load_dotenv()
@@ -26,7 +26,7 @@ def say_goodnight() -> any:
     while pygame.mixer.music.get_busy():
         continue
 
-    print(debug.DEBUG_FORMAT + "Stopping")
+    print(JarvisSettings.DEBUG_FORMAT + "Stopping")
     pygame.mixer.music.stop()
     exit()
 
