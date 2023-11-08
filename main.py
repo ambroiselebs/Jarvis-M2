@@ -26,9 +26,11 @@ Commands = {
 
 # SETUP
 pygame.init()
+JarvisPublicFunctions.drawJarvis()
 
 # GREET THE USER
 if JarvisSettings.DEBUG_STATUS:
+
     engine = pyttsx3.init()
     pygame.mixer.init()
 
