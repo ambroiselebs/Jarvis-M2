@@ -47,21 +47,32 @@ else:
 
 # Listening for audio
 def get_audio():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        # Adjusting for ambient noise
-        r.adjust_for_ambient_noise(source, duration=0.2)
-        print(debug.DEBUG_FORMAT + "Waiting for Jarvis...")
+    # With microphone
+    if not debug.DEBUG_MIC:
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            # Adjusting for ambient noise
+            r.adjust_for_ambient_noise(source, duration=0.2)
+            print(debug.DEBUG_FORMAT + "Waiting for Jarvis...")
 
-        # Listening for audio
-        audio = r.listen(source)
-        try:
-            text = r.recognize_google(audio, language="fr-FR")
-            print(f"{debug.DEBUG_FORMAT}| '{text}'")
-            return text
-        except sr.UnknownValueError:
-            print(debug.DEBUG_FORMAT + "Understanding error")
-            return ""
+            # Listening for audio
+            audio = r.listen(source)
+            try:
+                text = r.recognize_google(audio, language="fr-FR")
+                print(f"{debug.DEBUG_FORMAT}| '{text}'")
+                return text
+            except sr.UnknownValueError:
+                print(debug.DEBUG_FORMAT + "Understanding error")
+                return ""
+            except sr.RequestError as e:
+                print(debug.DEBUG_FORMAT + "Request error")
+                return ""
+            
+    # With input()
+    else:
+        text = input("Jarvis : ")
+        return text
+
 
 
 # MAIN LOOP
