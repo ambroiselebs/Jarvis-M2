@@ -100,6 +100,19 @@ def ai(query: str) -> str:
             msg = res['choices'][0]['message']['content']
             print(msg)
 
+            # create folder responses/ if it doesn't exist
+            if not os.path.exists("responses/"):
+                os.mkdir("responses/")
+
+            # Saving answer if 'enregistre la réponse' in query in a file called 'answers.txt'+random_number in the folder 'responses/'
+            if "enregistre la réponse" in query:
+                random_number = random.randint(0, 100000)
+                with open("responses/answers.txt"+str(random_number), "w") as f:
+                    f.write(msg)
+                engine.say("La réponse a bien été enregistrée")
+                engine.runAndWait()
+                return "ok"
+
             engine.say(msg)
             engine.runAndWait()
 
