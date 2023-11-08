@@ -18,6 +18,7 @@ Run the projet by executing : `python ./main.py`
 - pronotepy
 - shuttleai
 - plyer
+- pyfiglet
 ```
 
 # Structure : 

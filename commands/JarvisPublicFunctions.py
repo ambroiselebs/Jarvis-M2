@@ -1,6 +1,7 @@
 import pyttsx3
 from colorama import Fore
 import os
+import pyfiglet
 
 def say(tosay: str)->bool:
   engine = pyttsx3.init()
@@ -12,3 +13,4 @@ def say(tosay: str)->bool:
 
 def drawJarvis():
   os.system('cls' if os.name == 'nt' else 'clear')
+  print(Fore.BLUE + pyfiglet.figlet_format("Jarvis", font="slant"))
