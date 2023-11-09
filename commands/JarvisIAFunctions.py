@@ -13,7 +13,7 @@ shuttle = ShuttleClient(api_key=os.getenv("OPENAI_KEY"))
 engine = pyttsx3.init()
 chat = [{
     'role': 'system',
-    'content': 'you are a voice assistant named Jarvisse. Don t present yourself at each message, just one time it s enough.'
+    'content': 'you are a voice assistant named Jarvisse. Don t present yourself at each message, just one time it s enough. Never use emojis'
 }]
 
 def ai(query: str) -> str:  
@@ -78,7 +78,7 @@ def ai(query: str) -> str:
             chat.clear()
             chat.append({
                 'role': 'system',
-                'content': 'you are a voice assistant named Jarvisse. Don t present yourself at each message, just one time it s enough.'
+                'content': 'you are a voice assistant named Jarvisse. Don t present yourself at each message, just one time it s enough. Never use emojis'
             })
             engine.say("Ok, changeons de conversation")
             engine.runAndWait()
@@ -107,8 +107,8 @@ def ai(query: str) -> str:
             # Saving answer if 'enregistre la réponse' in query in a file called 'answers.txt'+random_number in the folder 'responses/'
             if "enregistre la réponse" in query:
                 random_number = random.randint(0, 100000)
-                with open("responses/answers.txt"+str(random_number), "w") as f:
-                    f.write(msg)
+                with open("responses/"+query[3:]+".txt", "w") as f:
+                    f.write(msg.encode("utf-8"))
                 engine.say("La réponse a bien été enregistrée")
                 engine.runAndWait()
                 return "ok"
