@@ -5,7 +5,6 @@ import commands.JarvisPublicFunctions as JarvisPublicFunctions
 import requests
 import json
 import os
-from plyer import notification
 import requests
 import random
 
@@ -19,23 +18,27 @@ chat = [{
 
 
 def dalle(query: str) -> str:
+    print(JarvisSettings.DEBUG_FORMAT + "DALL-E's gonna answer for this one")
+
+    # Setting up Dall-E settings
     api_key = os.getenv("OPENAI_KEY")
     api_base = "https://api.shuttleai.app/v1/images/generations"
 
+    # Post request settings
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
-    }
-            
+    }     
     data = {
         "model": "kandinsky-2.2",
         "prompt": query,
         "n": 1
     }
 
+    # Sending request
     res = requests.post(api_base, headers=headers, json=data)
     if res.status_code == 200:
-        # REturning image link
+        # Returning image link
         return json.loads(res.text)['data'][0]['url']
     else:
         print(f"{JarvisSettings.DEBUG_FORMAT}Error: {res}")
@@ -106,7 +109,7 @@ def ai(query: str) -> str:
 
             # Check if it need to be in a file
             if "enregistre la réponse" in query or "enregistre le résultat" in query:
-                f = open(f"responses/{query[:10]}.txt", "w", encoding="utf-8")
+                f = open(f"responses/{query[:20]}.txt", "w", encoding="utf-8")
                 f.write(str(response))
                 f.close()
 
