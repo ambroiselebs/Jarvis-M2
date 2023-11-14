@@ -15,39 +15,27 @@ chat = [{
     'role': 'system',
     'content': 'you are a voice assistant named Jarvisse. Don t present yourself at each message, just one time it s enough. Never use emojis'
 }]
-
-
+    
 def dalle(query: str) -> str:
-    print(JarvisSettings.DEBUG_FORMAT + "DALL-E's gonna answer for this one")
+    # Sending message to DALLE-E
+    print(f"{JarvisSettings.DEBUG_FORMAT}Dalle will handle this")
 
-    # Setting up Dall-E settings
-    api_key = os.getenv("OPENAI_KEY")
-    api_base = "https://api.shuttleai.app/v1/images/generations"
+    res = shuttle.images_generations(
+        model="kandinsky-2.2",
+        prompt=query,
+        n=1,
+    )
 
-    # Post request settings
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }     
-    data = {
-        "model": "kandinsky-2.2",
-        "prompt": query,
-        "n": 1
-    }
-
-    # Sending request
-    res = requests.post(api_base, headers=headers, json=data)
-    if res.status_code == 200:
-        # Returning image link
-        return json.loads(res.text)['data'][0]['url']
-    else:
-        print(f"{JarvisSettings.DEBUG_FORMAT}Error: {res}")
+    # Checking for errors
+    if "[ShuttleAI]" in res['data']:
         return "error"
+    
+    return res['data'][0]['url']
     
 
 def gpt(query: str) -> str:
     # Sending message to GPT-3.5-TURBO
-    print(JarvisSettings.DEBUG_FORMAT + "GPT3's gonna answer for this one")
+    print(f"{JarvisSettings.DEBUG_FORMAT}GPT-3.5-TURBO will handle this")
     chat.append({'role': 'user', 'content': query})
 
     res = shuttle.chat_completion(
@@ -59,14 +47,16 @@ def gpt(query: str) -> str:
         citations=False
     )
     msg = res['choices'][0]['message']['content']
-    print(msg)
 
+    # Checking for errors
     if "[ShuttleAI] Error:" in msg:
         return "error"
 
     return msg
 
 def ai(query: str) -> str:  
+    print(f"{JarvisSettings.DEBUG_FORMAT}Ai will handle this")
+
     # DALLE-E
     if "crée-moi" in query or "génère-moi" in query or "génère" in query or "génère-moi" in query and ("image" in query or "images" in query):
         response = dalle(query)
@@ -74,7 +64,7 @@ def ai(query: str) -> str:
             # Saving image to images/file_name
             random_number = random.randint(0, 100000)
             image_url = response
-            image_name = "images/"+image_url.split("/")[-1]+"-"+str(random_number)+".png"
+            image_name = "images/"+query[:40]+".png"
             image = requests.get(image_url)
 
             f = open(image_name, "wb")
