@@ -3,3 +3,8 @@
 results/
 *__pycache__/
 .idea
+
+images/
+images/*
+responses/*
+responses/*

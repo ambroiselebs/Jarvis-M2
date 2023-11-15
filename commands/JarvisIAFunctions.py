@@ -15,6 +15,7 @@ chat = [{
     'role': 'system',
     'content': 'you are a voice assistant named Jarvisse. Don t present yourself at each message, just one time it s enough. Never use emojis'
 }]
+oldChats = []
     
 def dalle(query: str) -> str:
     # Sending message to DALLE-E
@@ -47,6 +48,7 @@ def gpt(query: str) -> str:
         citations=False
     )
     msg = res['choices'][0]['message']['content']
+    print(msg)
 
     # Checking for errors
     if "[ShuttleAI] Error:" in msg:
@@ -83,6 +85,14 @@ def ai(query: str) -> str:
 
         # Clearing chat
         if "changeons de conversation" in query or "change de conversation" in query or "efface les autres messages" in query:
+            
+            # Saving old chat
+            oldChats.append({
+                'title': f"oldChat-{len(oldChats)+1}",
+                'content': chat
+            })
+            
+            # Clearing chat
             chat.clear()
             chat.append({
                 'role': 'system',
@@ -92,6 +102,16 @@ def ai(query: str) -> str:
             engine.runAndWait()
             return "cleared"
         
+        # Getting old chat
+        elif "reprends la conversation d'avant" in query:   
+            chat.append(oldChats[len(oldChats)-1]['content'])
+            print(chat)
+
+            engine.say("Ok, reprenons la conversation d'avant")
+            engine.runAndWait()
+
+            return "restored"
+
         # Sending message to GPT-3.5-TURBO
         else:
             response = gpt(query)
