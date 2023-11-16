@@ -40,7 +40,7 @@ def gpt(query: str) -> str:
     chat.append({'role': 'user', 'content': query})
 
     res = shuttle.chat_completion(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo-1106",
         messages=chat,
         stream=False,
         plain=False,
@@ -87,10 +87,7 @@ def ai(query: str) -> str:
         if "changeons de conversation" in query or "change de conversation" in query or "efface les autres messages" in query:
             
             # Saving old chat
-            oldChats.append({
-                'title': f"oldChat-{len(oldChats)+1}",
-                'content': chat
-            })
+            oldChats = chat
             
             # Clearing chat
             chat.clear()
@@ -104,8 +101,7 @@ def ai(query: str) -> str:
         
         # Getting old chat
         elif "reprends la conversation d'avant" in query:   
-            chat.append(oldChats[len(oldChats)-1]['content'])
-            print(chat)
+            chat = oldChats
 
             engine.say("Ok, reprenons la conversation d'avant")
             engine.runAndWait()
